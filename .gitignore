@@ -1,0 +1,7 @@
+# Ignore python virtual env
+venv
+
+
+# Ignore virutal env, staticfiles
+warehouse_inventory/.env
+warehouse_inventory/staticfiles
