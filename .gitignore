@@ -1,7 +1,14 @@
 # Ignore python virtual env
 venv
 
-
-# Ignore virutal env, staticfiles
+# Ignore virutal env, staticfiles, and uploads
 warehouse_inventory/.env
 warehouse_inventory/staticfiles
+warehouse_inventory/uploads
+
+#Ignore py cache
+warehouse_inventory/_pycache_
+
+# Ignore inventory migrations
+warehouse_inventory/inventory/_pycache_
+warehouse_inventory/inventory/migrations
