@@ -22,5 +22,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.item_list, name="main"),
     path("login", views.user_login, name="user_login"),
-    path("logout", views.user_logout, name="user_logout")
+    path("logout", views.user_logout, name="user_logout"),
+    path('items/<int:item_id>/delete/', views.delete_item, name='delete_item'),
+    path('items/<int:item_id>/update/', views.update_item, name='update_item'),
+    path('item/add/', views.add_item, name="add_item")
 ]
