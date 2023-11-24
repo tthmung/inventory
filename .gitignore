@@ -9,6 +9,7 @@ warehouse_inventory/uploads
 
 #Ignore py cache
 warehouse_inventory/__pycache__
+warehouse_inventory/warehouse_inventory/__pycache__
 
 # Ignore inventory migrations
 warehouse_inventory/inventory/__pycache__
