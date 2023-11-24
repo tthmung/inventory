@@ -31,5 +31,7 @@ urlpatterns = [
     path('item/add/', views.add_item, name="add_item")
 ]
 
+# For serving media file in development ONLY.
+# Don't use for production.
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

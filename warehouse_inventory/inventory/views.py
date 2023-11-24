@@ -6,18 +6,31 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 import os
 from django.conf import settings
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import User
+
+# Check if a user is a super user.
+# Super user (called staff_user in admin) can only add and delete items.
+# Regular user can only update items.
+def is_super_user(user: User) -> bool:
+    return user.is_authenticated and user.has_perm("inventory.add_item")
 
 # List all the items here
 @login_required(login_url='/login')
 def item_list(request):
     items = Item.objects.all()
-    return render(request, "main.html", {'items': items})
+    return render(request, "main.html", {'items': items, 'super_user': is_super_user(request.user)})
 
 # List individual item
 @login_required(login_url='/login')
 def individual_item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
-    return render(request, "item.html", {"item": item})
+    return render(request, "item.html", {"item": item, 'super_user': is_super_user(request.user)})
+
+# Render the form page, only accessible to admin and super user
+@user_passes_test(is_super_user)
+def render_form(request):
+    return render(request, "form.html")
 
 # User login
 def user_login(request):
@@ -41,7 +54,8 @@ def user_logout(request):
     messages.success(request, "logout successful")
     return redirect("/login")
 
-# Delete an item, implement user privilege later
+# Delete an item only if user is super_user
+@user_passes_test(is_super_user)
 @require_http_methods("DELETE")
 def delete_item(request, item_id):
 
@@ -59,7 +73,8 @@ def delete_item(request, item_id):
     messages.success(request, "DELETE item successful")
     return redirect("/")
 
-# Add an item, will add privilege later
+# Add an item only if user is super user
+@user_passes_test(is_super_user)
 @require_http_methods("POST")
 def add_item(request):
     form = ItemForm(request.POST, request.FILES)
@@ -73,6 +88,7 @@ def add_item(request):
     return redirect("/")
 
 # Update item, work on privilege later
+@login_required(login_url='/login')
 @require_http_methods("UPDATE")
 def update_item(request, item_id):
 
@@ -88,8 +104,3 @@ def update_item(request, item_id):
         messages.error(request, "Error updating item")
 
     return redirect("/")
-
-# Adding item to session storage
-
-
-# Deleting item to session storage

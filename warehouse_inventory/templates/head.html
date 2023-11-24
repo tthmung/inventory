@@ -60,7 +60,10 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Inventory</a>
             <div class="d-flex align-content-center justify-content-between gap-2">
-                <!-- Handle logout, and opening and closing of cart -->
+                <!-- Handle logout, adding, and opening and closing of cart -->
+                {% if super_user %}
+                <button class="logout_button" type="button" onclick="window.location='/add';">Add</button>
+                {% endif %}
                 <button class="logout_button" type="button" onclick="window.location='/logout';">Logout</button>
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar"
