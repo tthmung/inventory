@@ -4,8 +4,41 @@
 
 {% block content %}
 
-<div class="main ">
-    <h1>HELLO</h1>
+<div class="d-flex flex-wrap justify-content-evenly mx-auto" style="margin-top: 5rem;">
+    <!-- Accessing the array of items -->
+    {% for item in items %}
+    <div class="card mb-5 justify-content-evenly" style="width: 18rem;">
+        <img src="media/{{ item.image }}" class="card-img-top h-25" alt="{{ item.name }}">
+        <div class="p-1" style="height: 30%;">
+            <a href="item/{{ item.id }}" class="text-dark text-decoration-none card-a-hover">
+                <h5 class="card-title text-decoration-none">{{ item.name }}</h5>
+                <p class="card-text">{{ item.descriptions }}</p>
+            </a>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">{{ item.category }}</li>
+            <li class="list-group-item">Quantity: {{ item.quantity }}</li>
+            <li class="list-group-item d-flex justify-content-between">
+                <a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link">Another link</a>
+            </li>
+        </ul>
+    </div>
+    {% endfor %}
 </div>
+
+<!-- Style for the main. For handling limit of bootstrap -->
+<style>
+    .card-a-hover:hover {
+        color: blue !important;
+        text-decoration: underline !important;
+    }
+</style>
+
+<!-- Javascript to handle for handling adding to cart -->
+<Script>
+
+
+</Script>
 
 {% endblock %}

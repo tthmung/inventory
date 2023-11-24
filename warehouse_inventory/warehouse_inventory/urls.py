@@ -17,13 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from inventory import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.item_list, name="main"),
+    path("item/<int:item_id>", views.individual_item, name="item"),
     path("login", views.user_login, name="user_login"),
     path("logout", views.user_logout, name="user_logout"),
     path('items/<int:item_id>/delete/', views.delete_item, name='delete_item'),
     path('items/<int:item_id>/update/', views.update_item, name='update_item'),
     path('item/add/', views.add_item, name="add_item")
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

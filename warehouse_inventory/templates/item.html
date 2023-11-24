@@ -1,0 +1,17 @@
+{% extends 'head.html' %}
+
+{% block title %}{{ item.name }}{% endblock %}
+
+{% block content %}
+
+<div class="mt-5 w-100 h-100 mx-5 d-flex justify-content-between align-content-center">
+    <img src="../media/{{item.image}}" class="w-50" alt="{{ item.name }}" style="height: 50rem;">
+    <div class="w-50 my-auto">
+        <h1>{{ item.name }}</h1>
+        <p class="w-50">Description: {{ item.descriptions }}</p>
+        <p>category: {{ item.category }}</p>
+        <p>Quantity: {{ item.quantity }}</p>
+    </div>
+</div>
+
+{% endblock %}

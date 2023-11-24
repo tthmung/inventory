@@ -1,18 +1,23 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Item
+from .models import Item, ItemForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 import os
 from django.conf import settings
-from .forms import ItemForm
 
 # List all the items here
 @login_required(login_url='/login')
 def item_list(request):
     items = Item.objects.all()
     return render(request, "main.html", {'items': items})
+
+# List individual item
+@login_required(login_url='/login')
+def individual_item(request, item_id):
+    item = get_object_or_404(Item, pk=item_id)
+    return render(request, "item.html", {"item": item})
 
 # User login
 def user_login(request):
@@ -83,3 +88,8 @@ def update_item(request, item_id):
         messages.error(request, "Error updating item")
 
     return redirect("/")
+
+# Adding item to session storage
+
+
+# Deleting item to session storage
