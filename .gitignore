@@ -8,8 +8,8 @@ warehouse_inventory/static
 warehouse_inventory/uploads
 
 #Ignore py cache
-warehouse_inventory/_pycache_
+warehouse_inventory/__pycache__
 
 # Ignore inventory migrations
-warehouse_inventory/inventory/_pycache_
+warehouse_inventory/inventory/__pycache__
 warehouse_inventory/inventory/migrations
