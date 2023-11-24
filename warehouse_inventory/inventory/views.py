@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Item, ItemForm
+from .models import Item, ItemForm, Item_Category
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -8,6 +8,7 @@ import os
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 
 # Check if a user is a super user.
 # Super user (called staff_user in admin) can only add and delete items.
@@ -74,18 +75,22 @@ def delete_item(request, item_id):
     return redirect("/")
 
 # Add an item only if user is super user
-@user_passes_test(is_super_user)
-@require_http_methods("POST")
+@user_passes_test(is_super_user, redirect_field_name="/")
 def add_item(request):
-    form = ItemForm(request.POST, request.FILES)
-    if form.is_valid():
-        # Save item if form is valid
-        item = form.save()
-        messages.success(request, "Item added successfully")
-    else:
-        messages.error(request, "Error adding item")
 
-    return redirect("/")
+    if request.method == "POST":
+        form = ItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Save item if form is valid
+            form.save()
+            messages.success(request, "Item added successfully")
+        else:
+            messages.error(request, "Error adding item")
+
+        return redirect("/")
+
+    categories = Item_Category.objects.all()
+    return render(request, "form.html", {"categories": categories})
 
 # Update item, work on privilege later
 @login_required(login_url='/login')
@@ -104,3 +109,24 @@ def update_item(request, item_id):
         messages.error(request, "Error updating item")
 
     return redirect("/")
+
+# Export all items to csv
+@login_required(login_url='/login')
+def export_items_csv(request):
+
+    # Make ready for download, will be named items.csv
+    response = HttpResponse(content_type="text/csv")
+    response['Content-Disposition'] = 'attachment; filename="items.csv"'
+
+    import csv
+    # Create a csv file with the following headers
+    writer = csv.writer(response)
+    writer.writerow(["ID", "Name", "Descriptions", "Quantity", "Category", "Picture URL"])
+
+    # Get all items and add line by line
+    items = Item.objects.all()
+    for item in items:
+        writer.writerow([item.id, item.name, item.descriptions, item.quantity, item.category, item.image.url])
+
+    messages.success(request, "Successfully exported to csv")
+    return response

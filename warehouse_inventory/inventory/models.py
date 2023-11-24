@@ -1,6 +1,12 @@
 from django.db import models
 from django import forms
 
+# Change the uploaded file name to the corresponding item id number
+def item_image_filename(instance, filename: str):
+    # Split string by '.', the ext should be in last array
+    ext = filename.split('.')[-1]
+    return f'{instance.id}.{ext}'
+
 # Categories, this allow for expanding of categories
 class Item_Category(models.Model):
     name = models.CharField(max_length=50)
@@ -20,7 +26,7 @@ class Item(models.Model):
     # This is category_id in the database
     category = models.ForeignKey(Item_Category, on_delete=models.DO_NOTHING)
     # This is VARCHAR(100)
-    image = models.ImageField(upload_to=f'uploads/{id}/', null=False)
+    image = models.ImageField(upload_to=item_image_filename, null=False, blank=True)
 
     def __str__(self):
         return self.name

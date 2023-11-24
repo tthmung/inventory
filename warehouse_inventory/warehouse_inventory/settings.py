@@ -74,17 +74,16 @@ TEMPLATES = [
 WSGI_APPLICATION = "warehouse_inventory.wsgi.application"
 
 
-# Database
+# Database, connect to MySQL. Default is SQLITE.
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'mysql.connector.django',
         'NAME': os.getenv("MYSQL_NAME"),
         'USER': os.getenv("MYSQL_USER"),
         'PASSWORD': os.getenv("MYSQL_PASS"),
-        'HOST': os.getenv("MYSQL_HOST") , # Set to the address where your MySQL server is running
-        'PORT': os.getenv("MYSQL_PORT"),  # Set to the port your MySQL server is using
+        'HOST': os.getenv("MYSQL_HOST") ,
+        'PORT': os.getenv("MYSQL_PORT"),
     }
 }
 
