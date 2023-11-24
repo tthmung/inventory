@@ -4,6 +4,7 @@ venv
 # Ignore virutal env, staticfiles, and uploads
 warehouse_inventory/.env
 warehouse_inventory/staticfiles
+warehouse_inventory/static
 warehouse_inventory/uploads
 
 #Ignore py cache
