@@ -4,6 +4,19 @@
 
 {% block content %}
 
+<script>
+    function redirect(str) {
+        // Extract item ID from the current URL
+        var currentUrl = window.location.href;
+        var itemId = currentUrl.split('/').pop();
+
+        // Construct the update URL
+        var updateUrl = '/item/' + itemId + `/${str}/`;
+
+        window.location.href = updateUrl;
+    }
+</script>
+
 <div class="mt-5 w-100 h-100 mx-5 d-flex justify-content-between align-content-center">
     <img src="../media/{{item.image}}" class="w-50" alt="{{ item.name }}" style="height: 50rem;">
     <div class="w-50 my-auto">
@@ -11,6 +24,11 @@
         <p class="w-50">Description: {{ item.descriptions }}</p>
         <p>category: {{ item.category }}</p>
         <p>Quantity: {{ item.quantity }}</p>
+        {% if super_user %}
+            <button type="button" onclick="redirect('update')">Update</button>
+            <button type="button" onclick="redirect('delete')">Delete</button>
+        {% endif %}
+
     </div>
 </div>
 

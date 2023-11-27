@@ -4,11 +4,11 @@
 
 {% block content %}
 
-<div class="d-flex flex-wrap justify-content-evenly mx-auto" style="margin-top: 5rem;">
+<div class="d-flex flex-wrap justify-content-around mx-5" style="margin-top: 5rem;">
     <!-- Accessing the array of items -->
     {% for item in items %}
-    <div class="card mb-5 justify-content-evenly" style="width: 18rem;">
-        <img src="media/{{ item.image }}" class="card-img-top h-25" alt="{{ item.name }}">
+    <div class="card mb-5 justify-content-evenly" style="width: 20rem;">
+        <img src="media/{{ item.image }}" class="card-img-top h-100 object-fit-cover" alt="{{ item.name }}">
         <div class="p-1" style="height: 30%;">
             <a href="item/{{ item.id }}" class="text-dark text-decoration-none card-a-hover">
                 <h5 class="card-title text-decoration-none">{{ item.name }}</h5>
@@ -16,9 +16,9 @@
             </a>
         </div>
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">{{ item.category }}</li>
-            <li class="list-group-item">Quantity: {{ item.quantity }}</li>
-            <li class="list-group-item d-flex justify-content-between">
+            <li class="list-group-item p-1">{{ item.category }}</li>
+            <li class="list-group-item p-1">Quantity: {{ item.quantity }}</li>
+            <li class="list-group-item d-flex justify-content-between p-1">
                 <a href="#" class="card-link">Card link</a>
                 <a href="#" class="card-link">Another link</a>
             </li>

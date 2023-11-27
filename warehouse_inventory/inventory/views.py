@@ -84,32 +84,33 @@ def add_item(request):
             # Save item if form is valid
             form.save()
             messages.success(request, "Item added successfully")
+            return redirect("/")
         else:
             messages.error(request, "Error adding item")
-
-        return redirect("/")
+            print(form.errors)
 
     categories = Item_Category.objects.all()
-    return render(request, "form.html", {"categories": categories})
+    return render(request, "form.html", {"categories": categories, "Update": False})
 
 # Update item, work on privilege later
-@login_required(login_url='/login')
-@require_http_methods("UPDATE")
+@user_passes_test(is_super_user, redirect_field_name="/")
 def update_item(request, item_id):
 
-    # Get the item we want to update
     item = get_object_or_404(Item, pk=item_id)
-    form = ItemForm(request.POST, request.FILES, instance=item)
+    # Get the item we want to update
+    if request.method == "UPDATE":
+        form = ItemForm(request.POST, request.FILES, instance=item)
 
-    if form.is_valid():
-        # Save the item if form is valid
-        form.save()
-        messages.success(request, "Item updated successfully")
-    else:
-        messages.error(request, "Error updating item")
+        if form.is_valid():
+            # Save the item if form is valid
+            form.save()
+            messages.success(request, "Item updated successfully")
+        else:
+            messages.error(request, "Error updating item")
+            print(form.errors)
 
-    return redirect("/")
-
+    categories = Item_Category.objects.all()
+    return render(request, "form.html", {"categories": categories, "item": item, "Update": True})
 # Export all items to csv
 @login_required(login_url='/login')
 def export_items_csv(request):
