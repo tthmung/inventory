@@ -106,6 +106,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Default file
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -136,4 +138,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Media files (Images)
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / 'uploads'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')

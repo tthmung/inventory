@@ -1,29 +1,36 @@
 {% extends 'head.html' %}
 
-{% block title %}Add{% endblock %}
+{% block title %}
+{% if Update %}
+Update/item/{{item.id}}
+{% else %}
+Add
+{% endif %}
+{% endblock %}
 
 {% block content %}
 
 <div class="d-flex align-items-center justify-content-center vh-100">
-    <form method="post" action="{% url 'add_item' %}" enctype="multipart/form-data"
-        class="w-25 p-5 border-0 rounded-3 bg-warning bg-gradient">
+    <form method="post"
+        action="{% if Update %} {% url 'update_item' item.id %} {% else %} {% url 'add_item' %} {% endif %}"
+        enctype="multipart/form-data" class="w-25 p-5 border-0 rounded-3 bg-warning bg-gradient">
         {% csrf_token %}
-
         <div class="mb-3">
             <label for="item_name_input" class="form-label">Item name</label>
             {% if Update %}
-                <input type="text" class="form-control" id="item_name_input" name="name" value="{{item.name}}" disabled>
+            <input type="hidden" name="name" value="{{ item.name }}">
+            <input type="text" class="form-control" id="item_name_input" value="{{ item.name }}" disabled>
             {% else %}
-                <input type="text" class="form-control" id="item_name_input" name="name" required>
+            <input type="text" class="form-control" id="item_name_input" name="name" required>
             {% endif %}
         </div>
         <div class="mb-3">
             <label for="floatingTextarea2">Description</label>
             {% if Update %}
-                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
                 style="height: 100px" name="descriptions" required>{{item.descriptions}}</textarea>
             {% else %}
-                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
                 style="height: 100px" name="descriptions" required></textarea>
             {% endif %}
         </div>
@@ -32,18 +39,18 @@
                 <select class="form-select" id="floatingSelect" aria-label="Floating label select example"
                     name="category" required>
                     {% if Update %}
-                        {% for category in categories %}
-                            {% if category == item.category %}
-                                <option selected value="{{ category.id }}">{{ category }}</option>
-                            {% else %}
-                                <option value="{{ category.id }}">{{ category }}</option>
-                            {% endif %}
-                        {% endfor %}
+                    {% for category in categories %}
+                    {% if category == item.category %}
+                    <option selected value="{{ category.id }}">{{ category }}</option>
                     {% else %}
-                        <option selected>Open this select menu</option>
-                        {% for category in categories %}
-                            <option value="{{ category.id }}">{{ category }}</option>
-                        {% endfor %}
+                    <option value="{{ category.id }}">{{ category }}</option>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <option selected>Open this select menu</option>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category }}</option>
+                    {% endfor %}
                     {% endif %}
                 </select>
                 <label for="floatingSelect">Select category</label>
@@ -52,19 +59,23 @@
         <div class="mb-3">
             <label for="item_quantity" class="form-label">Quantity</label>
             {% if Update %}
-                <input type="number" class="form-control" name="quantity" id="item_quantity" placeholder="0" min="0" value="{{item.quantity}}">
+            <input type="number" class="form-control" name="quantity" id="item_quantity" placeholder="0" min="0"
+                value="{{item.quantity}}">
             {% else %}
-                <input type="number" class="form-control" name="quantity" id="item_quantity" placeholder="0" min="0" required>
+            <input type="number" class="form-control" name="quantity" id="item_quantity" placeholder="0" min="0"
+                required>
             {% endif %}
         </div>
         <div class="mb-3">
             <label for="item_image" class="form-label">File</label>
-            <input type="file" class="form-control" name="image" id="item_image" accept="image/*" required>
             {% if Update %}
-                <div class="mb-2">
-                    Current:
-                    <a href="../../../media/{{item.image}}" target="_blank">{{item.image}}</a>
-                </div>
+            <input type="file" class="form-control" name="image" id="item_image" accept="image/*">
+            <div class="mb-2">
+                Current:
+                <a href="../../../media/{{item.image}}" target="_blank">{{item.image}}</a>
+            </div>
+            {% else %}
+            <input type="file" class="form-control" name="image" id="item_image" accept="image/*" required>
             {% endif %}
         </div>
         <button type="submit" class="form_button">{% if Update %}Update{% else %}Submit{% endif %}</button>

@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.core.files.storage import default_storage
 
 # Check if a user is a super user.
 # Super user (called staff_user in admin) can only add and delete items.
@@ -57,7 +58,6 @@ def user_logout(request):
 
 # Delete an item only if user is super_user
 @user_passes_test(is_super_user)
-@require_http_methods("DELETE")
 def delete_item(request, item_id):
 
     # Get the item with following item_id
@@ -98,19 +98,26 @@ def update_item(request, item_id):
 
     item = get_object_or_404(Item, pk=item_id)
     # Get the item we want to update
-    if request.method == "UPDATE":
+    if request.method == "POST":
         form = ItemForm(request.POST, request.FILES, instance=item)
 
         if form.is_valid():
-            # Save the item if form is valid
+            new_image = form.cleaned_data.get('image')
+            # Delete the old picture if new image is provided
+            if new_image:
+                image_path = os.path.join(settings.MEDIA_ROOT, str(item.image))
+                if os.path.exists(image_path):
+                    os.remove(image_path) # Delete the image file
             form.save()
             messages.success(request, "Item updated successfully")
+            return redirect(f'/item/{item_id}')
         else:
             messages.error(request, "Error updating item")
             print(form.errors)
 
     categories = Item_Category.objects.all()
     return render(request, "form.html", {"categories": categories, "item": item, "Update": True})
+
 # Export all items to csv
 @login_required(login_url='/login')
 def export_items_csv(request):

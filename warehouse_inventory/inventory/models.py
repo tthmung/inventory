@@ -1,11 +1,20 @@
 from django.db import models
 from django import forms
+from django.conf import settings
+import os
 
 # Change the uploaded file name to the corresponding item id number
 def item_image_filename(instance, filename: str):
     # Split string by '.', the ext should be in last array
+    f_name = ''
     ext = filename.split('.')[-1]
-    return f'{instance.id}.{ext}'
+    if instance.id:
+        f_name =  f'{instance.id}.{ext}'
+    else:
+        import uuid
+        unique_id = str(uuid.uuid4())
+        f_name = f'{unique_id}.{ext}'
+    return os.path.join(settings.MEDIA_ROOT, f_name)
 
 # Categories, this allow for expanding of categories
 class Item_Category(models.Model):
