@@ -10,6 +10,7 @@ Add
 
 {% block content %}
 
+<!-- Form used for updating and adding items -->
 <div class="d-flex align-items-center justify-content-center vh-100">
     <form method="post"
         action="{% if Update %} {% url 'update_item' item.id %} {% else %} {% url 'add_item' %} {% endif %}"

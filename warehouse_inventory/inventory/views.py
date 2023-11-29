@@ -148,6 +148,7 @@ def update_quantity(request, item_id, action):
     # Get the item that we want to update
     item = get_object_or_404(Item, pk=item_id)
 
+    # Depending on the type add or subtract from existing item
     if action == "Take":
         item.quantity = item.quantity - int(request.POST[f'{item_id}_quantity_take'])
     else:
@@ -155,5 +156,6 @@ def update_quantity(request, item_id, action):
 
     item.save()
 
+    # Refresh the item page
     messages.success(request, "Successful updated item")
     return redirect(f'/item/{item_id}')
