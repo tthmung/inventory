@@ -88,8 +88,26 @@
         <p class="w-50">Description: {{ item.descriptions }}</p>
         <p>category: {{ item.category }}</p>
         <p>Quantity: {{ item.quantity }}</p>
+        <form method="post" action="{% url 'update_quantity' item.id 'Add' %}" class="d-flex justify-content-between w-50">
+            {% csrf_token %}
+            <label for="{{item.id}}_quantity_add">Quantity: </label>
+            <input type="number" min="0" max="999" id="{{item.id}}_quantity_add" name="{{item.id}}_quantity_add"
+                class="form-control d-block" required />
+            <button type="submit" class="item_button" style="color: black; background-color: blanchedalmond;">
+                Add
+            </button>
+        </form>
+        <form method="post" action="{% url 'update_quantity' item.id 'Take' %}" class="d-flex justify-content-between w-50">
+            {% csrf_token %}
+            <label for="{{item.id}}_quantity_take">Quantity: </label>
+            <input type="number" min="0" max="{{item.quantity}}" id="{{item.id}}_quantity_take" name="{{item.id}}_quantity_take"
+                class="form-control d-block" required />
+            <button type="submit" class="item_button" style="color: black; background-color: burlywood;">
+                Take
+            </button>
+        </form>
         {% if super_user %}
-        <div class="d-flex w-50 justify-content-between">
+        <div class="d-flex w-50 justify-content-between mt-3">
             <button type="button" class="item_button" style="background: blue;"
                 onclick="redirect('update')">Update</button>
             <button type="button" class="item_button" style="background: red;"

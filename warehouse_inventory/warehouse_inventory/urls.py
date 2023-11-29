@@ -29,7 +29,8 @@ urlpatterns = [
     path("logout", views.user_logout, name="user_logout"),
     path('item/<int:item_id>/delete/', views.delete_item, name='delete_item'),
     path('item/<int:item_id>/update/', views.update_item, name='update_item'),
-    path('export-csv/', views.export_items_csv, name="export_items_csv")
+    path('export-csv/', views.export_items_csv, name="export_items_csv"),
+    path('item/<int:item_id>/<str:action>/', views.update_quantity, name='update_quantity'),
 ]
 
 # For serving media file in development ONLY.

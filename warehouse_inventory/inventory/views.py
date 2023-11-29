@@ -9,7 +9,9 @@ from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.core.files.storage import default_storage
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
 
 # Check if a user is a super user.
 # Super user (called staff_user in admin) can only add and delete items.
@@ -138,3 +140,20 @@ def export_items_csv(request):
 
     messages.success(request, "Successfully exported to csv")
     return response
+
+# Update quantity only
+@login_required(login_url='/login')
+def update_quantity(request, item_id, action):
+
+    # Get the item that we want to update
+    item = get_object_or_404(Item, pk=item_id)
+
+    if action == "Take":
+        item.quantity = item.quantity - int(request.POST[f'{item_id}_quantity_take'])
+    else:
+        item.quantity = item.quantity + int(request.POST[f'{item_id}_quantity_add'])
+
+    item.save()
+
+    messages.success(request, "Successful updated item")
+    return redirect(f'/item/{item_id}')
