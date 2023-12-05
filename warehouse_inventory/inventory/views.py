@@ -3,15 +3,11 @@ from .models import Item, ItemForm, Item_Category
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
 import os
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-import json
 
 # Check if a user is a super user.
 # Super user (called staff_user in admin) can only add and delete items.
